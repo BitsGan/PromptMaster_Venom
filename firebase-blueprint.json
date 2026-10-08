@@ -1,0 +1,149 @@
+{
+  "entities": {
+    "userProfile": {
+      "title": "UserProfile",
+      "description": "User profile containing authentication details, game stats, and high scores",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "The unique user authentication ID."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the user."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the user."
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "Avatar photo URL of the user."
+        },
+        "completedLevels": {
+          "type": "array",
+          "description": "Array of level IDs completed by the user with score >= 50."
+        },
+        "totalScore": {
+          "type": "integer",
+          "description": "Sum of all highest scores across all levels."
+        },
+        "highScores": {
+          "type": "object",
+          "description": "Object mapping level IDs to historical high scores."
+        },
+        "timeTrialBestTimes": {
+          "type": "object",
+          "description": "Object mapping level IDs to best remaining times in time trial mode."
+        },
+        "timeTrialSuccesses": {
+          "type": "array",
+          "description": "Array of level IDs where the user won in time trial mode."
+        },
+        "completedDailyChallenges": {
+          "type": "array",
+          "description": "Array of date strings representing daily challenges successfully completed (score >= 50)."
+        },
+        "dailyHighScores": {
+          "type": "object",
+          "description": "Mapping from calendar date strings to the highest score achieved on that daily challenge."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the user first logged in."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the user stats were last synced."
+        }
+      },
+      "required": ["uid", "email"]
+    },
+    "userSolution": {
+      "title": "UserSolution",
+      "description": "Historical record of scores and sub-elements achieved by the user for custom prompts",
+      "type": "object",
+      "properties": {
+        "levelId": {
+          "type": "integer",
+          "description": "Level ID relating to the solved prompt."
+        },
+        "levelTitle": {
+          "type": "string",
+          "description": "Title of the level."
+        },
+        "prompt": {
+          "type": "string",
+          "description": "The custom instruction text that was submitted."
+        },
+        "score": {
+          "type": "integer",
+          "description": "The similarity score achieved."
+        },
+        "submittedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of this history record."
+        }
+      },
+      "required": ["levelId", "prompt", "score", "submittedAt"]
+    },
+    "dailyChallenge": {
+      "title": "DailyChallenge",
+      "description": "Dynamic daily prompt puzzle rotated in real-time",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Static ID of the daily challenge."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the prompt challenge."
+        },
+        "difficulty": {
+          "type": "string",
+          "description": "Challenge difficulty (typically Hard)."
+        },
+        "targetKeywords": {
+          "type": "array",
+          "description": "Keywords that must be matched in the evaluated prompt."
+        },
+        "hints": {
+          "type": "string",
+          "description": "Hint text describing how to engineering a solution."
+        },
+        "description": {
+          "type": "string",
+          "description": "Target design specifications."
+        },
+        "proceduralTheme": {
+          "type": "string",
+          "description": "Aesthetic style code for the prompt canvas renderer."
+        },
+        "dateStr": {
+          "type": "string",
+          "description": "The calendar day key when this challenge is served (e.g. '2026-06-18')."
+        }
+      },
+      "required": ["id", "title", "targetKeywords", "description", "proceduralTheme", "dateStr"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "userProfile",
+      "description": "Document holding user gameplay and profile stats synchronized with the cloud."
+    },
+    "/users/{userId}/solutions/{solutionId}": {
+      "schema": "userSolution",
+      "description": "Sub-collection preserving details of individual level attempts or successful solutions."
+    },
+    "/dailyChallenges/{challengeId}": {
+      "schema": "dailyChallenge",
+      "description": "Universal collection hosting the rotated daily challenge info."
+    }
+  }
+}

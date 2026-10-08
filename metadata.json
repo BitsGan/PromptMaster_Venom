@@ -1,0 +1,6 @@
+{
+  "name": "PromptMaster",
+  "description": "An interactive, gamified prompt engineering trainer with real-time prompt evaluation, semantic analysis, and responsive visual puzzle feedback.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
